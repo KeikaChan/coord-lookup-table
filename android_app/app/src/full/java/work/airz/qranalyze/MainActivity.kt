@@ -151,7 +151,7 @@ class MainActivity : AppCompatActivity() {
 
             val savefile = File(Environment.getExternalStorageDirectory().absolutePath, "priqr_assist")
             if (!savefile.exists() || !savefile.isDirectory) savefile.mkdirs()
-            val csvfile = File(savefile, "ids.csv")
+            val csvfile = File(savefile, "lookup.csv")
             csvfile.writeText("${editText.text},${idText.text}")
 
             readerView.resume()
