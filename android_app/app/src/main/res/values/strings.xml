@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">PriQR</string>
+    <string name="savePath">保存ファイル名(拡張子抜き)</string>
+</resources>
