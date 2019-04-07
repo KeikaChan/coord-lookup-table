@@ -41,5 +41,22 @@
             tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="448dp" />
 
+        <TextView
+            android:id="@+id/coordname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="コーデID↓" />
+
+        <EditText
+            android:id="@+id/id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="text"
+            android:text=""
+            android:hint="PCH1-01"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="448dp" />
+
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

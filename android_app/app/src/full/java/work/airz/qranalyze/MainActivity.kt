@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Environment
 import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
@@ -19,6 +20,7 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
 import com.journeyapps.barcodescanner.DecoratedBarcodeView
+import java.io.File
 import java.nio.charset.Charset
 import java.util.*
 
@@ -126,8 +128,11 @@ class MainActivity : AppCompatActivity() {
         imageView.adjustViewBounds = true
         imageView.setImageBitmap(qrImage)
         var editText = dialogRoot.findViewById<EditText>(R.id.filename)
-        dialogRoot.findViewById<TextView>(R.id.hexall).setText(qrstring)
-        editText.setText(qrstring.replace("\\s".toRegex(),"") .substring(6,18))
+        dialogRoot.findViewById<TextView>(R.id.hexall).text = qrstring
+        editText.setText(qrstring.replace("\\s".toRegex(), "").substring(6, 18))
+
+        var idText = dialogRoot.findViewById<TextView>(R.id.id)
+
 
         var builder = AlertDialog.Builder(this)
         builder.setView(dialogRoot)
@@ -136,18 +141,24 @@ class MainActivity : AppCompatActivity() {
             dialogInterface.dismiss()
             readerView.resume()
         })
-        builder.setPositiveButton("クリップボードにコピー", DialogInterface.OnClickListener { dialogInterface, _ ->
+        builder.setPositiveButton("コピー&保存", DialogInterface.OnClickListener { dialogInterface, _ ->
 
             //クリップボードのサービスのインスタンスを取得する
             var mManager: ClipboardManager = applicationContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
 
-                //editTextに入力された文字をクリップボードにコピーする
+            //editTextに入力された文字をクリップボードにコピーする
             mManager.primaryClip = ClipData.newPlainText("label", editText.text)
+
+            val savefile = File(Environment.getExternalStorageDirectory().absolutePath, "priqr_assist")
+            if (!savefile.exists() || !savefile.isDirectory) savefile.mkdirs()
+            val csvfile = File(savefile, "ids.csv")
+            csvfile.writeText("${editText.text},${idText.text}")
 
             readerView.resume()
         })
         builder.show()
     }
+
     private fun checkPermission(): Boolean {
         // 既に許可している
         return if (ActivityCompat.checkSelfPermission(this,
